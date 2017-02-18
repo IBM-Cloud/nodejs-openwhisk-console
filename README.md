@@ -6,8 +6,21 @@ OpenWhisk is a serverless platform that lets developers quickly and easily build
 
 ## Prerequisites
 1. Bluemix account.
-2. OpenWhisk CLI
-3. Cloudfoundry or Bluemix CLI
+2. OpenWhisk CLI.
+3. Cloudfoundry or Bluemix CLI.
+
+## Getting Started
+- Don’t have Bluemix account? <a title="(Opens in a new tab or window)" href="https://console.ng.bluemix.net/registration/" target="_blank">Sign up</a> to create a free trial account.
+- Have a Bluemix account? Use <a title="(Opens in a new tab or window)" href="https://console.ng.bluemix.net/openwhisk/editor" target="_blank">this link</a>.
+
+### Develop in your Browser
+
+Try out OpenWhisk in your [Browser](https://console.ng.bluemix.net/openwhisk/editor) to create actions, automate actions using triggers, and explore public packages. Visit the [learn more](https://console.ng.bluemix.net/openwhisk/learn) page for a quick tour of the OpenWhisk User Interface.
+
+### Setting up the OpenWhisk CLI
+
+You can use the OpenWhisk command line interface (CLI) to set up your namespace and authorization key. Go to [Configure CLI](https://new-console.ng.bluemix.net/openwhisk/cli) and follow the instructions to install it.
+
 
 ## Run the app locally
 
@@ -27,8 +40,33 @@ git clone https://github.com/VidyasagarMSC/openwhisk-nodejs-webui.git
  OpenWhisk_AuthKey=" "
 
 ```
-<br>For OpenWhisk auth key, follow the instructions by clicking "Download Open CLI" button on [this page](https://console.ng.bluemix.net/openwhisk/)
+<br>For OpenWhisk auth key, run the below command 
+```
+wsk property get --auth
+```
 - Run `npm start` to start the app
 - Access the running app in a browser at http://localhost:6007
+## Push to Bluemix
+
+- Go to the root of the folder on your terminal, run the below command
+```
+cf push
+```
+- Based on the artifacts in your manifest.yml file, NodeJS runtime is created and you can see your app running on the host your provided.
+
+## Test your app
+
+a.	http://localhost:6007/invoke/MyWatsonSequence?message=Interconnect (Try with different message values and use %20 if there is a space in your message like hello%20world)
+b.	http://localhost:6007/list/actions
+c.	http://localhost:6007/list/routes
+d.	http://localhost:6007/list/packages
+
+Replace localhost:6007 with your Bluemix Hostname to test this on your public url.
+
+## Coming Soon
+
+- Creating a sequence.
+- Watson Service Chaining.
+
 
 [Install Node.js]: https://nodejs.org/en/download/
