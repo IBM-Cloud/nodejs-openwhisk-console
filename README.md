@@ -54,14 +54,20 @@ cf push
 ```
 - Based on the artifacts in your manifest.yml file, NodeJS runtime is created and you can see your app running on the host your provided.
 
-## Test your app
+## Test your app Web UI
 
-a.	http://localhost:6007/invoke/MyWatsonSequence?message=Interconnect (Try with different message values and use %20 if there is a space in your message like hello%20world)
-b.	http://localhost:6007/list/actions
-c.	http://localhost:6007/list/routes
-d.	http://localhost:6007/list/packages
+- http://localhost:6007/invoke/MyWatsonSequence?message=Interconnect (Try with different message values and use %20 if there is a space in your message like hello%20world)
+-   http://localhost:6007/list/actions
+- 	http://localhost:6007/list/routes
+- 	http://localhost:6007/list/packages
 
 Replace localhost:6007 with your Bluemix Hostname to test this on your public url.
+
+## Test REST API 
+-  GET /api/v1/invoke/action/{actionName} followed by simple query
+-  POST /api/v1/invoke/action/{actionName} with a POST body eg., {"message":"test"}
+-  POST /api/v1/invoke/trigger/{triggerName} with a POST body (if any)
+-  GET /api/v1/list/{entity} entity = actions or packages or triggers or namespaces or activations or rules or routes
 
 ## Coming Soon
 
