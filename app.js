@@ -26,11 +26,13 @@ var app = express();
 // serve the files out of ./public as our main files
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended:
+true }));
 app.engine('.html', require('ejs').__express);
 app.set('views', __dirname + '/views');
 app.set('view engine', 'html');
 
+//Invoke for webUI
 app.get("/invoke/:action", function(req, res) {
      ow.actions.invoke({actionName: req.params.action, blocking: true, params: req.query }).then(function(param) {
         // Return the result of the OpenWhisk call
@@ -39,6 +41,7 @@ app.get("/invoke/:action", function(req, res) {
         res.render('main', {response:result,request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
     }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
 });
+
 
 // Lists actions, packages, outes
 app.get("/list/:param",function(req,res)
@@ -49,6 +52,7 @@ app.get("/list/:param",function(req,res)
       ow.actions.list().then(actions => {
       actions.forEach(action => result.push(JSON.stringify({"name":action.name, "namespace":action.namespace})+"<br>"));
       res.render('main',{response:result,request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
+
     }).catch(err => {
         console.error('failed to list actions', err);
     });
@@ -74,29 +78,124 @@ app.get("/list/:param",function(req,res)
     })
       res.render('main', {response:result,request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
     }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
-
-  // break;
-       /*var result = [];
-       ow.routes.list().then(routes => {
-       routes.apis.forEach(route => result.push(JSON.parse(route)));
-       res.render('main',{response:result});
-    }).catch(err => {
-      console.error('failed to list packages', err);
-   });*/
-  break;
-
-  case "actionsjson":
-    ow.actions.list().then(function(param){
-     console.log(param);
-      var name = JSON.stringify(param,null,2);
-      res.render('main', {response:name,request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
-    }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
    break;
 
     default:
-     console.log("Sorry, Not a right route");
+     res.render('main', {response:{
+     "status": "404",
+     "source": { "pointer": "Check the url" },
+     "detail": "Resource not found."
+   },request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
     break;
   }
+
+});
+
+/****************************/
+//       API Code           //
+/****************************/
+//Invoke an Action
+app.get("/api/v1/invoke/action/:actionName", function(req, res) {
+     ow.actions.invoke({actionName: req.params.actionName, blocking: true, params: req.query }).then(function(param) {
+        // Return the result of the OpenWhisk call
+        //res.send(JSON.stringify(param.response.result));
+        var result = JSON.stringify(param.response.result);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(result);
+        //res.render('main', {response:result,request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
+    }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+});
+
+app.post("/api/v1/invoke/action/:actionName", function(req,res) {
+ ow.actions.invoke({actionName: req.params.actionName, blocking: true, params: req.body }).then(function(param) {
+   // Return the result of the OpenWhisk call
+   //res.send(JSON.stringify(param.response.result));
+   var result = JSON.stringify(param.response.result);
+   res.setHeader('Content-Type', 'application/json');
+   res.send(result);
+   //res.render('main', {response:result,request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
+ }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+});
+
+app.post("/api/v1/invoke/trigger/:triggerName", function(req, res) {
+   ow.triggers.invoke({triggerName: req.params.triggerName, params: req.body}).then(function(param) {
+     var result = JSON.stringify(param);
+     res.setHeader('Content-Type', 'application/json');
+     res.send(result);
+     console.log(result);
+   }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+});
+
+// List actions, packages, namespaces, triggers and routes
+app.get("/api/v1/list/:param",function(req,res)
+{
+  switch(req.params.param)
+  {
+    case "actions":
+      ow.actions.list().then(function(param){
+        var response = JSON.stringify(param,null,2);
+        res.setHeader('Content-Type', 'application/json');
+        res.send(response);
+      }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+   break;
+
+   case "activations":
+     ow.activations.list().then(function(param){
+       var response = JSON.stringify(param,null,2);
+       res.setHeader('Content-Type', 'application/json');
+       res.send(response);
+     }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+   break;
+
+   case "packages":
+     ow.packages.list().then(function(param){
+       var response = JSON.stringify(param,null,2);
+       res.setHeader('Content-Type', 'application/json');
+       res.send(response);
+     }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+  break;
+
+  case "routes":
+    ow.routes.list().then(function(param){
+      var response = JSON.stringify(param,null,2);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(response);
+    }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+ break;
+
+ case "triggers":
+   ow.triggers.list().then(function(param){
+     var response = JSON.stringify(param,null,2);
+     res.setHeader('Content-Type', 'application/json');
+     res.send(response);
+   }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+  break;
+
+  case "rules":
+    ow.rules.list().then(function(param){
+      var response = JSON.stringify(param,null,2);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(response);
+    }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+   break;
+
+  case "namespaces":
+     ow.namespaces.list().then(function(param){
+       var response = JSON.stringify(param,null,2);
+       res.setHeader('Content-Type', 'application/json');
+       res.send(response);
+     }).catch(function(err) {res.send("Error: " + JSON.stringify(err));});
+    break;
+
+   default:
+      res.send("Error: " + JSON.stringify({
+      "status": "404",
+      "source": { "pointer": "Check the url" },
+      "detail": "Resource not found."
+    }));
+    break;
+
+ }
 
 });
 
