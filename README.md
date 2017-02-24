@@ -4,6 +4,8 @@ The Webui demonstrates a simple, reusable Node.js web application based on the E
 
 OpenWhisk is a serverless platform that lets developers quickly and easily build feature-rich apps that automatically trigger responses to events.
 
+![OpenWhisk NodeJS query console](https://raw.githubusercontent.com/VidyasagarMSC/openwhisk-nodejs-webui/master/public/images/Openwhisk-nodejs.gif)
+
 ## Prerequisites
 1. Bluemix account.
 2. OpenWhisk CLI.
@@ -35,12 +37,12 @@ git clone https://github.com/VidyasagarMSC/openwhisk-nodejs-webui.git
 - Create a newfile and save it as .env in the root of the folder.Add the below
   values to .env file and save
 
-``` 
- OpenWhisk_HOST = "openwhisk.ng.bluemix.net" 
+```
+ OpenWhisk_HOST = "openwhisk.ng.bluemix.net"
  OpenWhisk_AuthKey=" "
 
 ```
-<br>For OpenWhisk auth key, run the below command 
+<br>For OpenWhisk auth key, run the below command
 ```
 wsk property get --auth
 ```
@@ -63,7 +65,7 @@ cf push
 
 Replace localhost:6007 with your Bluemix Hostname to test this on your public url.
 
-## Test REST API 
+## Test REST API
 -  GET /api/v1/invoke/action/{actionName} followed by simple query
 -  POST /api/v1/invoke/action/{actionName} with a POST body eg., {"message":"test"}
 -  POST /api/v1/invoke/trigger/{triggerName} with a POST body (if any)
