@@ -83,7 +83,7 @@ app.get("/list/:param",function(req,res)
     default:
      res.render('main', {response:{
      "status": "404",
-     "source": { "pointer": "Check the url" },
+     "source": { "pointer": "Check the url you have entered" },
      "detail": "Resource not found."
    },request:req.protocol + '://' + req.get('Host') + req.url +"<br>method:"+ req.method});
     break;
@@ -190,7 +190,7 @@ app.get("/api/v1/list/:param",function(req,res)
    default:
       res.send("Error: " + JSON.stringify({
       "status": "404",
-      "source": { "pointer": "Check the url" },
+      "source": { "pointer": "Check the url you have entered" },
       "detail": "Resource not found."
     }));
     break;
