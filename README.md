@@ -40,7 +40,6 @@ git clone https://github.com/VidyasagarMSC/openwhisk-nodejs-webui.git
 ```
  OpenWhisk_HOST = "openwhisk.ng.bluemix.net"
  OpenWhisk_AuthKey=" "
-
 ```
 <br>For OpenWhisk auth key, run the below command
 ```
@@ -65,11 +64,8 @@ cf push
 
 Replace localhost:6007 with your Bluemix Hostname to test this on your public url.
 
-## Test REST API
--  GET /api/v1/invoke/action/{actionName} followed by simple query
--  POST /api/v1/invoke/action/{actionName} with a POST body eg., {"message":"test"}
--  POST /api/v1/invoke/trigger/{triggerName} with a POST body (if any)
--  GET /api/v1/list/{entity} entity = actions or packages or triggers or namespaces or activations or rules or routes
+## REST API
+Refer [openwhisk-nodejs-api repo](https://github.com/VidyasagarMSC/openwhisk-nodejs-api)
 
 ## Coming Soon
 
