@@ -29,7 +29,7 @@ You can use the OpenWhisk command line interface (CLI) to set up your namespace 
 - [Install Node.js][]
 - Clone the repo
 ```
-git clone https://github.com/VidyasagarMSC/openwhisk-nodejs-webui.git
+git clone https://github.com/IBM-Bluemix/nodejs-openwhisk-console.git
 ```
 - cd into the app directory
 - Run `npm install` to install the app's dependencies
